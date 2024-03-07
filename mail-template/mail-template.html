@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Successfuly</title>
+  </head>
+  <body>
+    <h1>Xin Chào {{userName}}</h1>
+    <p>Phone: {{phoneNumber}}</p>
+    <p>Address: {{address}}</p>
+
+    <table style="width: 100%" border="{1}">
+      <thead>
+        <tr>
+          <th>Tên Sản Phẩm</th>
+          <th>Hình Ảnh</th>
+          <th>Giá</th>
+          <th>Số Lượng</th>
+          <th>Thành Tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{tableRows}}
+      </tbody>
+    </table>
+
+    <p>Tổng Thanh Toán: {{totalPrice}} VND</p>
+
+    <p>Cảm ơn bạn!</p>
+  </body>
+</html>
