@@ -18,7 +18,12 @@ const adminRouter = require("./router/adminRouter");
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: [
+      "https://shopping-website-377c0.web.app",
+      "https://admin-page-5fc2b.web.app/admin",
+      "http://localhost:3000",
+      "http://localhost:3001",
+    ],
     methods: ["POST", "PUT", "GET", "DELETE"],
     credentials: true,
   })
