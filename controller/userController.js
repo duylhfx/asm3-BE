@@ -8,8 +8,14 @@ const { SECRET_KEY } = process.env;
 // Get user online
 exports.getUser = async (req, res) => {
   try {
-    // console.log("user", req.user);
-    const decoded = req.user;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader)
+      return res.status(500).json({ msg: "Unauthorized!", status: 500 });
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, SECRET_KEY);
+
     const user = await User.findOne({ _id: decoded.userId }).select(
       "email name phone address role"
     );
