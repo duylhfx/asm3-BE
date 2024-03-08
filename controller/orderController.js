@@ -4,14 +4,22 @@ const Product = require("../model/Products");
 const fs = require("fs");
 const path = require("path");
 const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
 
-const { PORT_MAILER, PASS_MAILER, USER_MAILER } = process.env;
+const { SECRET_KEY, PORT_MAILER, PASS_MAILER, USER_MAILER } = process.env;
 
 // GET all orders by user
 exports.getAllOrders = async (req, res) => {
   try {
-    if (!req.user) return res.status(400).json({ msg: "Unauthorized!" });
-    const orders = await Order.find({ userId: req.user.userId })
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader)
+      return res.status(500).json({ msg: "Unauthorized!", status: 500 });
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    const orders = await Order.find({ userId: decoded.userId })
       .populate({
         path: "userId",
         select: "name phone address",
@@ -27,7 +35,14 @@ exports.getAllOrders = async (req, res) => {
 // GET order by id
 exports.getOrderById = async (req, res) => {
   try {
-    if (!req.user) return res.status(400).json({ msg: "Unauthorized!" });
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader)
+      return res.status(500).json({ msg: "Unauthorized!", status: 500 });
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, SECRET_KEY);
+
     const { orderId } = req.params;
 
     const order = await Order.findById(orderId).populate({
@@ -36,9 +51,9 @@ exports.getOrderById = async (req, res) => {
     });
 
     // error if id request is not admin
-    if (req.user.role !== "admin") {
+    if (decoded.role !== "admin") {
       // error if id request is not matched userId created
-      if (order.userId._id.toString() !== req.user.userId)
+      if (order.userId._id.toString() !== decoded.userId)
         return res.status(500).json({ msg: "Unauthorized!" });
     }
 
