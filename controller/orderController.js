@@ -10,6 +10,7 @@ const { PORT_MAILER, PASS_MAILER, USER_MAILER } = process.env;
 // GET all orders by user
 exports.getAllOrders = async (req, res) => {
   try {
+    if (!req.user) return res.status(400).json({ msg: "Unauthorized!" });
     const orders = await Order.find({ userId: req.user.userId })
       .populate({
         path: "userId",
@@ -26,6 +27,7 @@ exports.getAllOrders = async (req, res) => {
 // GET order by id
 exports.getOrderById = async (req, res) => {
   try {
+    if (!req.user) return res.status(400).json({ msg: "Unauthorized!" });
     const { orderId } = req.params;
 
     const order = await Order.findById(orderId).populate({
@@ -152,7 +154,7 @@ exports.postOrderEmail = async (req, res) => {
 
     // creating host to send mail
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: "smtp.gmail.com",
       port: PORT_MAILER,
       auth: {
         user: USER_MAILER,

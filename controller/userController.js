@@ -59,13 +59,14 @@ exports.postSignup = async (req, res) => {
 
     // Create cookie
     // add token
-    res.cookie("jwt", token, {
-      httpOnly: true, // Prevent client-side JS access
-      maxAge: 7 * 24 * 60 * 60 * 1000, //  7 days
-      sameSite: "strict",
-    });
+    // res.cookie("jwt", token, {
+    //   httpOnly: true, // Prevent client-side JS access
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, //  7 days
+    //   sameSite: "strict",
+    // });
 
-    res.status(200).json({ msg: "New User Created!" });
+    // res.status(200).json({ msg: "New User Created!" });
+    res.status(200).json(token);
   } catch (err) {
     console.log(err);
     res.status(500).json({ msg: "Error Creating New User!" });
@@ -96,13 +97,14 @@ exports.postLogin = async (req, res) => {
 
     // Create cookie
     // add token
-    res.cookie("jwt", token, {
-      httpOnly: true, // Prevent client-side JS access
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      sameSite: "strict",
-    });
+    // res.cookie("jwt", token, {
+    //   httpOnly: true, // Prevent client-side JS access
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    //   sameSite: "strict",
+    // });
 
-    return res.status(200).json({ msg: "User login!" });
+    // return res.status(200).json({ msg: "User login!" });
+    return res.status(200).json(token);
   } catch (err) {
     console.log(err);
     return res.status(500).json({ msg: "Error login!" });

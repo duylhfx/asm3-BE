@@ -38,17 +38,20 @@ app.use(helmet());
 // middleware to auth user has token
 function authToken(req, res, next) {
   // auth user by token jwt
-  const token = req.cookies.jwt;
-  if (token) {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
     try {
+      const token = authHeader.split(" ")[1];
       const decoded = jwt.verify(token, SECRET_KEY);
       req.user = decoded;
+      // console.log("user", req.user);
     } catch (err) {
       console.log(err);
     }
   }
   next();
 }
+
 // router associate
 app.use(authToken);
 app.use(mainRouter);
