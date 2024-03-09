@@ -7,8 +7,8 @@ module.exports = {
         origin: [
           "https://shopping-website-377c0.web.app",
           "https://shopping-website-377c0.firebaseapp.com",
-          "https://admin-page-5fc2b.web.app/admin",
-          "https://admin-page-5fc2b.firebaseapp.com/admin",
+          "https://admin-page-5fc2b.web.app",
+          "https://admin-page-5fc2b.firebaseapp.com",
           "http://localhost:3000",
           "http://localhost:3001",
         ],
