@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controller/adminController");
 const multer = require("multer");
+const jwt = require("jsonwebtoken");
+
+const { SECRET_KEY } = process.env;
 
 // Define storage for uploaded files
 const storage = multer.diskStorage({
@@ -34,15 +37,16 @@ const upload = multer({
 
 // auth user by token jwt
 const authUser = (req, res, next) => {
-  const auth = req.user;
-  // console.log("auth", auth);
-  if (auth && auth.role !== "customer") {
-    try {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    if (decoded && decoded.role === "admin") {
       next();
-    } catch (err) {
-      console.log(err);
     }
-  } else {
+  } catch (err) {
+    console.log(err);
     return res.status(500).json({ msg: "Unauthorized" });
   }
 };

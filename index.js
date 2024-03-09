@@ -50,6 +50,7 @@ mongoose
     const io = require("./util/socket").init(http);
 
     io.on("connection", (socket) => {
+      console.log(`User id ${socket.id} connected!`);
       //joining a room
       socket.on("joinRoom", ({ chatId }) => {
         const data = {
