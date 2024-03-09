@@ -3,12 +3,11 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
-const { PORT, URI, SECRET_KEY } = process.env;
+const { PORT, URI } = process.env;
 const http = require("http").createServer(app);
 const compression = require("compression");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
 
 // router module
 const mainRouter = require("./router/mainRouter");
@@ -20,7 +19,9 @@ app.use(
   cors({
     origin: [
       "https://shopping-website-377c0.web.app",
+      "https://shopping-website-377c0.firebaseapp.com",
       "https://admin-page-5fc2b.web.app/admin",
+      "https://admin-page-5fc2b.firebaseapp.com/admin",
       "http://localhost:3000",
       "http://localhost:3001",
     ],
@@ -35,25 +36,7 @@ app.use(cookieParser());
 app.use(compression());
 app.use(helmet());
 
-// middleware to auth user has token
-function authToken(req, res, next) {
-  // auth user by token jwt
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    try {
-      const token = authHeader.split(" ")[1];
-      const decoded = jwt.verify(token, SECRET_KEY);
-      req.user = decoded;
-      // console.log("user", req.user);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  next();
-}
-
 // router associate
-app.use(authToken);
 app.use(mainRouter);
 app.use("/products", productRouter);
 app.use("/orders", orderRouter);

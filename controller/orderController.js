@@ -13,11 +13,15 @@ exports.getAllOrders = async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
 
+    console.log("authHeader", authHeader);
+
     if (!authHeader)
       return res.status(500).json({ msg: "Unauthorized!", status: 500 });
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, SECRET_KEY);
+
+    console.log("decoded", authHeader);
 
     const orders = await Order.find({ userId: decoded.userId })
       .populate({
@@ -25,6 +29,8 @@ exports.getAllOrders = async (req, res) => {
         select: "name phone address",
       })
       .select("userId totalPrice");
+
+    console.log("orders", orders);
     return res.status(200).json(orders);
   } catch (err) {
     console.log(err);
